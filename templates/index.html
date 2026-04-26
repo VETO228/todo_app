@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Список дел</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #eeeeee;
+      color: #222222;
+    }
+    h1 {
+      color: #0d47a1;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .meta {
+      color: #666666;
+      font-size: 14px;
+    }
+    form {
+      margin-top: 16px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      min-width: 260px;
+    }
+    button, a.button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background: #0d47a1;
+      color: #ffffff;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+    a.delete {
+      background: #b71c1c;
+    }
+    a.clear {
+      background: #616161;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Мои задачи</h1>
+
+  <ul>
+    {% for task in tasks %}
+      <li>
+        <div class="row">
+          <div>
+            <div>{{ task.text }}</div>
+            <div class="meta">Дата создания: {{ task.created_at }}</div>
+          </div>
+          <a class="button delete" href="/delete/{{ loop.index0 }}">Удалить</a>
+        </div>
+      </li>
+    {% else %}
+      <li>Список задач пуст.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Добавить задачу</h2>
+  <form method="POST" action="/add">
+    <input type="text" name="task" placeholder="Новая задача" required>
+    <button type="submit">Добавить</button>
+  </form>
+
+  <a class="button clear" href="/clear">Очистить всё</a>
+</body>
+</html>
