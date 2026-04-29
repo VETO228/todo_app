@@ -59,21 +59,39 @@
       background: #616161;
       margin-top: 12px;
     }
+    .link_tasks {
+      display: flex;
+      flex-direction: column;
+    }
   </style>
 </head>
 <body>
   <h1>Мои задачи</h1>
-
+  <div class="link_tasks">
+    <a href="/active">Активные задачи</a>
+    <a href="/completed">Выполненые задачи</a>
+  </div>
   <ul>
     {% for task in tasks %}
-      <li>
-        {{ task.text }} — <small>{{ task.created_at }}</small>
-        <a href="/edit/{{ loop.index0 }}"> Редактировать</a>
-        <a href="/delete/{{ loop.index0 }}"> Удалить</a>
-      </li>
+      <ul>
+    {% for task in tasks %}
+        <li>
+            {% if task.done %}
+                <s>{{ task.text }}</s>
+            {% else %}
+                {{ task.text }}
+            {% endif %}
+            — <small>{{ task.date }}</small>
+            <a href="/toggle/{{ loop.index0 }}">✅Выполнено</a>
+            <a href="/edit/{{ loop.index0 }}"> Редактировать</a>
+            <a href="/delete/{{ loop.index0 }}"> Удалить</a>
+        </li>
+    {% endfor %}
+</ul>
     {% else %}
       <li>Список задач пуст.</li>
     {% endfor %}
+    <h1><p>Осталось задач: {{ tasks|selectattr('done', 'equalto', False)|list|length }}</p></h1>
   </ul>
 
   <h2>Добавить задачу</h2>

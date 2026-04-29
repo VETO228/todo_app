@@ -39,6 +39,7 @@ def add_task():
             {
                 "text": text,
                 "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                "done": False,
             }
         )
         save_tasks(tasks)
@@ -59,6 +60,7 @@ def clear_tasks():
     save_tasks(tasks)
     return redirect("/")
 
+
 @app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id):
     if task_id < 0 or task_id >= len(tasks):
@@ -77,6 +79,23 @@ def edit_task(task_id):
 
     else:
         return render_template('edit.html', task=tasks[task_id])
+
+
+@app.route('/toggle/<int:task_id>')
+def toggle_task(task_id):
+    if 0 <= task_id < len(tasks):
+        tasks[task_id]['done'] = not tasks[task_id]['done']
+        save_tasks(tasks)
+    return redirect('/')
+
+@app.route('/active')
+def active_tasks():
+    return render_template("active.html", tasks=tasks)
+
+
+@app.route('/completed')
+def completed_tasks():
+    return render_template("completed.html", tasks=tasks)
 
 
 if __name__ == "__main__":

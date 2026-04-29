@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/">Назад</a>
+    <h1>Выполненые задачи</h1>
+    <ul>
+        {% for task in tasks %}
+            {% if task.done %}
+                <h2>{{ task.text }}</h2>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>
