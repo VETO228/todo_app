@@ -72,7 +72,7 @@
     <a href="/completed">Выполненые задачи</a>
   </div>
   <ul>
-    {% for task in tasks %}
+    {% if tasks.length != 0 %}
       <ul>
     {% for task in tasks %}
         <li>
@@ -90,7 +90,7 @@
 </ul>
     {% else %}
       <li>Список задач пуст.</li>
-    {% endfor %}
+    {% endif %}
     <h1><p>Осталось задач: {{ tasks|selectattr('done', 'equalto', False)|list|length }}</p></h1>
   </ul>
 
