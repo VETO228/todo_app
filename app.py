@@ -64,6 +64,9 @@ def edit_task(task_id):
     if task_id < 0 or task_id >= len(tasks):
         return "Задача не найдена", 404
 
+    if len(tasks[task_id]["text"]) == 0:
+        return redirect("/") 
+
     if request.method == 'POST':
         new_text = request.form.get('task', '').strip()
 
