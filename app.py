@@ -34,12 +34,14 @@ def index():
 @app.route("/add", methods=["POST"])
 def add_task():
     text = request.form.get("task", "").strip()
+    priority = request.form.get("priority", "средний").strip()
     if text:
         tasks.append(
             {
                 "text": text,
                 "created_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
                 "done": False,
+                "priority": priority,
             }
         )
         save_tasks(tasks)
@@ -96,6 +98,67 @@ def active_tasks():
 @app.route('/completed')
 def completed_tasks():
     return render_template("completed.html", tasks=tasks)
+
+
+@app.route('/search')
+def search():
+    query = request.args.get('q', '').strip().lower()
+    if query:
+        filtered_tasks = [task for task in tasks if query in task['text'].lower()]
+    else:
+        filtered_tasks = tasks
+    return render_template('index.html', tasks=filtered_tasks, search_query=query)
+
+
+@app.route('/sort/date')
+def sort_by_date(): 
+	# key=lambda t: t.get('date', '') — для каждой задачи берём поле 'date'
+ # Если поля 'date' нет, используем пустую строку ''
+ # reverse=True — сортируем от большей даты к меньшей (новые сверху)
+    sorted_tasks = sorted(tasks, key=lambda t: t.get('date', ''), reverse=True)
+    return render_template('index.html', tasks=sorted_tasks)
+
+
+@app.route('/sort/status')
+def sort_by_status():
+    # False (не выполнено) идёт раньше True (выполнено)
+     # key=lambda t: t.get('done', False) — берём значение 'done' (True или False)
+ # В Python False == 0, True == 1, поэтому сначала идут задачи с False
+    sorted_tasks = sorted(tasks, key=lambda t: t.get('done', False))
+    return render_template('index.html', tasks=sorted_tasks)
+
+
+@app.route('/sort/priority')
+def sort_by_priority():
+ # Задаём числовой вес каждому приоритету
+ # высокий = 1 (самый маленький, будет первым)
+ # средний = 2
+ # низкий = 3 (самый большой, будет последним)
+    priority_order = {'высокий': 1, 'средний': 2, 'низкий': 3}
+# Для каждой задачи:
+ # - берём её priority (если нет — 'средний' по умолчанию)
+ # - преобразуем в число по словарю priority_order
+ # - сортируем по этому числу (от меньшего к большему)
+    sorted_tasks = sorted(
+        tasks,
+        key=lambda t: priority_order.get(t.get('priority', 'средний'), 2)
+    )
+    return render_template('index.html', tasks=sorted_tasks)
+
+
+@app.route('/sort/alpha')
+def sort_by_alpha():
+ # key=lambda t: t.get('text', '').lower() — берём текст задачи
+ # .lower() — приводим к нижнему регистру (чтобы А и а не различались)
+ # сортируем в алфавитном порядке (A → Z, А → Я)
+    sorted_tasks = sorted(tasks, key=lambda t: t.get('text', '').lower())
+    return render_template('index.html', tasks=sorted_tasks)
+
+
+@app.route('/sort/alter_status')
+def sort_by_alter_status():
+    sorted_tasks = sorted(tasks, key=lambda t: t.get('false', True))
+    return render_template('index.html', tasks=sorted_tasks)
 
 
 if __name__ == "__main__":

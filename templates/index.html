@@ -71,6 +71,17 @@
     <a href="/active">Активные задачи</a>
     <a href="/completed">Выполненые задачи</a>
   </div>
+  <form action="/search" method="get" class="search-form">
+    <input type="text" name="q" placeholder="Поиск по задачам..." value="{{ search_query or '' }}">
+    <button type="submit"> Найти</button>
+  </form>
+  <p>
+    <a href="/sort/date"> По дате (новые)</a> |
+    <a href="/sort/status"> По статусу</a> |
+    <a href="/sort/alter_status"> По статусу(наоборот)</a> |
+    <a href="/sort/priority"> По приоритету</a> |
+    <a href="/sort/alpha"> По алфавиту</a>
+  </p>
   <ul>
     {% if tasks.length != 0 %}
       <ul>
@@ -80,6 +91,13 @@
                 <s>{{ task.text }}</s>
             {% else %}
                 {{ task.text }}
+            {% endif %}
+            {% if task.priority == "высокий" %}
+              <p>Red</p>
+            {% elif task.priority == "средний" %}
+              <p>Yellow</p>
+            {% else %}
+              <p>Green</p>
             {% endif %}
             — <small>{{ task.date }}</small>
             <a href="/toggle/{{ loop.index0 }}">✅Выполнено</a>
@@ -97,6 +115,11 @@
   <h2>Добавить задачу</h2>
   <form method="POST" action="/add">
     <input type="text" name="task" placeholder="Новая задача" required>
+      <select name="priority">
+        <option value="высокий">высокий</option>
+        <option value="средний">средний</option>
+        <option value="низкий">низкий</option>
+      </select>
     <button type="submit">Добавить</button>
   </form>
 
