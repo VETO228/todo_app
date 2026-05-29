@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+import sqlite3
 
 from flask import Flask, redirect, render_template, request
 
@@ -159,6 +160,16 @@ def sort_by_alpha():
 def sort_by_alter_status():
     sorted_tasks = sorted(tasks, key=lambda t: t.get('false', True))
     return render_template('index.html', tasks=sorted_tasks)
+
+
+@app.route('/products')
+def products():
+    conn = sqlite3.connect('mybase.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM products')
+    products = cursor.fetchall()
+    conn.close()
+    return render_template("base.html", products=products)
 
 
 if __name__ == "__main__":
