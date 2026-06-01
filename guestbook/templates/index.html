@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Гостевая книга</title>
+    <link rel="stylesheet" href="static/style.css" required>
+</head>
+<body>
+    <h1>📖 Гостевая книга</h1>
+    
+    <h2>Сообщения</h2>
+    {% if messages %}
+        {% for msg in messages %}
+        <div>
+            <strong>{{ msg.name }}</strong> ({{ msg.created_at }})
+            <p>{{ msg.message }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Пока нет сообщений.</p>
+    {% endif %}
+
+    <h2>Добавить сообщение</h2>
+      <form method="POST" action="/add" class="add_message">
+        <input type="text" name="name" placeholder="Название" required>
+        <textarea type="text" name="message" rows=4 placeholder="Сообщение" required></textarea>
+      <button type="submit">Добавить</button>
+  </form>
+</body>
+</html>
