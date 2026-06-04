@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрацию в гостевую книгу</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Регистрация в гостевую книгу</h1>
+        
+        <form method="POST">
+            <input type="text" name="name" placeholder="Имя" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit">Зарегатся</button>
+        </form>
+        
+        <p><a href="/">← На главную</a></p>
+    </div>
+</body>
+</html>

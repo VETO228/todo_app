@@ -5,19 +5,33 @@
     <link rel="stylesheet" href="static/style.css" required>
 </head>
 <body>
+    <div class="auth-links">
+        {% if logged_in %}
+            {# Пользователь авторизован #}
+            Вы вошли как <strong>{{ username }}</strong> |
+            <a href="/logout">Выйти</a>
+        {% else %}
+            {# Пользователь не авторизован #}
+            <a href="/login">Войти</a> (админ: admin / 123)
+        {% endif %}
+    </div>
     <h1>📖 Гостевая книга</h1>
     
     <h2>Сообщения</h2>
     {% if messages %}
         {% for msg in messages %}
-        <div>
+        <div class="message {% if msg.created_at == today %}fresh{% endif %}">
             <strong>{{ msg.name }}</strong> ({{ msg.created_at }})
             <p>{{ msg.message }}</p>
+             {% if logged_in %}
+                <a href="/delete/{{ msg.id }}" class="delete-btn" onclick="return confirm('Удалить сообщение?')">Удалить</a>
+            {% endif %}
         </div>
         {% endfor %}
     {% else %}
         <p>Пока нет сообщений.</p>
     {% endif %}
+    <p class="counter"> Всего сообщений: {{ total_count }}</p>
 
     <h2>Добавить сообщение</h2>
       <form method="POST" action="/add" class="add_message">
@@ -25,5 +39,6 @@
         <textarea type="text" name="message" rows=4 placeholder="Сообщение" required></textarea>
       <button type="submit">Добавить</button>
   </form>
+  <a href="/delete_all/">Удалить все сообщения</a>
 </body>
 </html>
