@@ -3,6 +3,7 @@
 <head>
     <title>Гостевая книга</title>
     <link rel="stylesheet" href="static/style.css" required>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" required>
 </head>
 <body>
     <div class="auth-links">
@@ -19,24 +20,26 @@
     
     <h2>Сообщения</h2>
     {% if messages %}
+        <div class="row justify-content-center">
         {% for msg in messages %}
-        <div class="message {% if msg.created_at == today %}fresh{% endif %}">
-            <strong>{{ msg.name }}</strong> ({{ msg.created_at }})
-            <p>{{ msg.message }}</p>
+        <div class="message {% if msg.created_at == today %}fresh{% endif %} card card-body mb-3 col-md-4">
+            <strong class="card-title">{{ msg.name }}</strong> <p class="card-subtitle text-muted">({{ msg.created_at }})</p>
+            <p class="card-text">{{ msg.message }}</p>
              {% if logged_in %}
                 <a href="/delete/{{ msg.id }}" class="delete-btn" onclick="return confirm('Удалить сообщение?')">Удалить</a>
             {% endif %}
         </div>
         {% endfor %}
+        </div>
     {% else %}
         <p>Пока нет сообщений.</p>
     {% endif %}
     <p class="counter"> Всего сообщений: {{ total_count }}</p>
 
     <h2>Добавить сообщение</h2>
-      <form method="POST" action="/add" class="add_message">
-        <input type="text" name="name" placeholder="Название" required>
-        <textarea type="text" name="message" rows=4 placeholder="Сообщение" required></textarea>
+      <form method="POST" action="/add" class="add_message mb-3">
+        <input class="form-control" type="text" name="name" placeholder="Название" required>
+        <textarea class="form-control" type="text" name="message" rows=4 placeholder="Сообщение" required></textarea>
       <button type="submit">Добавить</button>
   </form>
   <a href="/delete_all/">Удалить все сообщения</a>

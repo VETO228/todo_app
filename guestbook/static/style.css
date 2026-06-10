@@ -30,7 +30,7 @@ h1 {
 
 /* Имя автора */
 .message strong {
-    color: yellow;
+    color: gray;
 }
 
 /* Дата сообщения */
