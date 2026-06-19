@@ -23,10 +23,11 @@
         <div class="row justify-content-center">
         {% for msg in messages %}
         <div class="message {% if msg.created_at == today %}fresh{% endif %} card card-body mb-3 col-md-4">
+            <p>{{ msg.id }}</p>
             <strong class="card-title">{{ msg.name }}</strong> <p class="card-subtitle text-muted">({{ msg.created_at }})</p>
             <p class="card-text">{{ msg.message }}</p>
              {% if logged_in %}
-                <a href="/delete/{{ msg.id }}" class="delete-btn" onclick="return confirm('Удалить сообщение?')">Удалить</a>
+                <a href="/delete/{{ msg.id }}" class="delete-btn">Удалить</a>
             {% endif %}
         </div>
         {% endfor %}
